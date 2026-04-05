@@ -46,8 +46,16 @@ jobs:
               --title "$title" \
               --body "$body" \
               --label "$labels" \
+              --milestone "$milestone" \
               || echo "Warning: failed to create issue '$title'"
           }
+
+          # Ensure milestones exist (ignore errors if already created)
+          for ms in M1 M2 M3 M4 M5 M6; do
+            gh api repos/"$GITHUB_REPOSITORY"/milestones \
+              --method POST \
+              --field title="$ms" 2>/dev/null || true
+          done
 
           # Ensure labels exist
           for label in "architecture" "backend" "frontend" "integration" "testing" "devops" "task" "todo"; do

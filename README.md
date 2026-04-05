@@ -30,7 +30,7 @@ docs/
 เพื่อให้ Issue ใหม่เข้า GitHub Project อัตโนมัติ ต้องตั้งค่า Secret ก่อน:
 
 1. สร้าง **Personal Access Token (PAT)** ที่ [GitHub Settings → Tokens](https://github.com/settings/tokens/new)
-   - ต้องมี scope: **`repo`** และ **`project`**
+   - ต้องมี scope: **`repo`** และ **`write:project`**
 2. ไปที่ **Repository Settings → Secrets and variables → Actions**
 3. สร้าง Secret ชื่อ **`GH_TOKEN`** และวาง token ที่สร้างไว้
 

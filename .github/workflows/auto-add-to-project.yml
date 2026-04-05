@@ -10,6 +10,7 @@ jobs:
   add-to-project:
     name: Add to GitHub Project #5
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - uses: actions/add-to-project@v1.0.2
         with:
