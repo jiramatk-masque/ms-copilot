@@ -25,6 +25,25 @@ docs/
 
 แผนงานทั้งหมดถูกจัดการผ่าน [GitHub Project #5](https://github.com/users/jiramatk-masque/projects/5/views/1)
 
+### การตั้งค่า Automation (ต้องทำครั้งเดียว)
+
+เพื่อให้ Issue ใหม่เข้า GitHub Project อัตโนมัติ ต้องตั้งค่า Secret ก่อน:
+
+1. สร้าง **Personal Access Token (PAT)** ที่ [GitHub Settings → Tokens](https://github.com/settings/tokens/new)
+   - ต้องมี scope: **`repo`** และ **`write:project`**
+2. ไปที่ **Repository Settings → Secrets and variables → Actions**
+3. สร้าง Secret ชื่อ **`GH_TOKEN`** และวาง token ที่สร้างไว้
+
+### Workflows
+
+| Workflow | ทำงานเมื่อ | หน้าที่ |
+|---|---|---|
+| `auto-add-to-project.yml` | Issue หรือ PR ถูกสร้างใหม่ | เพิ่ม item เข้า Project #5 อัตโนมัติ |
+| `create-project-issues.yml` | รันด้วยมือ (workflow_dispatch) | สร้าง Issues ทั้ง 55 tasks จาก docs/planning |
+
+**วิธีสร้าง Issues ทั้งหมดครั้งแรก:**
+ไปที่ Actions → "Create Planned Issues" → Run workflow
+
 ## สถานะปัจจุบัน
 
 | หมวดหมู่ | จำนวน Task | สถานะ |
