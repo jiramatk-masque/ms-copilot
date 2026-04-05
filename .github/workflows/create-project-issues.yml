@@ -1,0 +1,128 @@
+name: Create Planned Issues
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (print issues without creating)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+jobs:
+  create-issues:
+    name: Create all 55 planned tasks as GitHub Issues
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create planned issues
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -e
+
+          create_issue() {
+            local title="$1"
+            local body="$2"
+            local labels="$3"
+            local milestone="$4"
+
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "[DRY RUN] Would create: $title (labels=$labels, milestone=$milestone)"
+              return
+            fi
+
+            gh issue create \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$title" \
+              --body "$body" \
+              --label "$labels" \
+              || echo "Warning: failed to create issue '$title'"
+          }
+
+          # Ensure labels exist
+          for label in "architecture" "backend" "frontend" "integration" "testing" "devops" "task" "todo"; do
+            gh label create "$label" --color "#0075ca" --repo "$GITHUB_REPOSITORY" 2>/dev/null || true
+          done
+          gh label create "priority:high"   --color "#e11d48" --repo "$GITHUB_REPOSITORY" 2>/dev/null || true
+          gh label create "priority:medium" --color "#f97316" --repo "$GITHUB_REPOSITORY" 2>/dev/null || true
+          gh label create "priority:low"    --color "#84cc16" --repo "$GITHUB_REPOSITORY" 2>/dev/null || true
+
+          # ── Group 1: Architecture & Planning (M1) ──
+          create_issue "[M1] กำหนด System Architecture ภาพรวม" "**กลุ่มงาน:** Architecture\n**Milestone:** M1\n**Team:** Architect\n\nกำหนดและออกแบบ System Architecture ภาพรวมของระบบ ms-copilot" "task,todo,architecture,priority:high" "M1"
+          create_issue "[M1] ออกแบบ Database Schema" "**กลุ่มงาน:** Architecture\n**Milestone:** M1\n**Team:** Backend\n\nออกแบบ Database Schema สำหรับระบบทั้งหมด" "task,todo,architecture,priority:high" "M1"
+          create_issue "[M1] กำหนด API Contract / OpenAPI Spec" "**กลุ่มงาน:** Architecture\n**Milestone:** M1\n**Team:** Backend\n\nกำหนด API Contract และจัดทำ OpenAPI Specification" "task,todo,architecture,priority:high" "M1"
+          create_issue "[M1] ออกแบบ Authentication & Authorization flow" "**กลุ่มงาน:** Architecture\n**Milestone:** M1\n**Team:** Security\n\nออกแบบระบบ Authentication และ Authorization" "task,todo,architecture,priority:high" "M1"
+          create_issue "[M1] กำหนด Tech Stack และ Dependencies" "**กลุ่มงาน:** Architecture\n**Milestone:** M1\n**Team:** All\n\nกำหนด Tech Stack และ Dependencies ที่จะใช้ในโปรเจ็ค" "task,todo,architecture,priority:medium" "M1"
+          create_issue "[M1] จัดทำ Architecture Decision Records (ADR)" "**กลุ่มงาน:** Architecture\n**Milestone:** M1\n**Team:** Architect\n\nจัดทำ ADR สำหรับการตัดสินใจด้าน Architecture" "task,todo,architecture,priority:medium" "M1"
+          create_issue "[M1] วางแผน Infrastructure (Cloud/On-Prem)" "**กลุ่มงาน:** Architecture\n**Milestone:** M1\n**Team:** DevOps\n\nวางแผน Infrastructure ของระบบ" "task,todo,architecture,priority:high" "M1"
+          create_issue "[M1] ออกแบบ Data Flow Diagram" "**กลุ่มงาน:** Architecture\n**Milestone:** M1\n**Team:** Architect\n\nออกแบบ Data Flow Diagram สำหรับระบบ" "task,todo,architecture,priority:medium" "M1"
+          create_issue "[M1] กำหนด Non-Functional Requirements (NFR)" "**กลุ่มงาน:** Architecture\n**Milestone:** M1\n**Team:** All\n\nกำหนด NFR เช่น Performance, Scalability, Security" "task,todo,architecture,priority:medium" "M1"
+          create_issue "[M1] จัดทำ Project Charter และ Scope" "**กลุ่มงาน:** Architecture\n**Milestone:** M1\n**Team:** PM\n\nจัดทำ Project Charter และกำหนด Scope ของโปรเจ็ค" "task,todo,architecture,priority:high" "M1"
+
+          # ── Group 2: Backend Development (M2) ──
+          create_issue "[M2] ตั้งค่า Backend Project Structure" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nตั้งค่าโครงสร้างโปรเจ็ค Backend" "task,todo,backend,priority:high" "M2"
+          create_issue "[M2] พัฒนา Authentication Service" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Service สำหรับ Authentication" "task,todo,backend,priority:high" "M2"
+          create_issue "[M2] พัฒนา User Management API" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา API สำหรับจัดการผู้ใช้" "task,todo,backend,priority:high" "M2"
+          create_issue "[M2] พัฒนา Copilot Core Engine" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Core Engine ของระบบ Copilot" "task,todo,backend,priority:high" "M2"
+          create_issue "[M2] พัฒนา Conversation History Service" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Service สำหรับจัดเก็บ Conversation History" "task,todo,backend,priority:medium" "M2"
+          create_issue "[M2] พัฒนา Knowledge Base Service" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Service สำหรับจัดการ Knowledge Base" "task,todo,backend,priority:high" "M2"
+          create_issue "[M2] พัฒนา Document Processing Service" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Service สำหรับประมวลผลเอกสาร" "task,todo,backend,priority:medium" "M2"
+          create_issue "[M2] พัฒนา Search & Retrieval Service" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Service สำหรับค้นหาและดึงข้อมูล" "task,todo,backend,priority:high" "M2"
+          create_issue "[M2] พัฒนา Notification Service" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Service สำหรับการแจ้งเตือน" "task,todo,backend,priority:medium" "M2"
+          create_issue "[M2] พัฒนา Analytics & Logging Service" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Service สำหรับ Analytics และ Logging" "task,todo,backend,priority:medium" "M2"
+          create_issue "[M2] พัฒนา Rate Limiting & Throttling" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนาระบบ Rate Limiting และ Throttling" "task,todo,backend,priority:medium" "M2"
+          create_issue "[M2] พัฒนา Webhook Handler" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Webhook Handler" "task,todo,backend,priority:low" "M2"
+          create_issue "[M2] พัฒนา Background Job Processor" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Background Job Processor" "task,todo,backend,priority:medium" "M2"
+          create_issue "[M2] พัฒนา File Storage Service" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Service สำหรับจัดการไฟล์" "task,todo,backend,priority:medium" "M2"
+          create_issue "[M2] พัฒนา Configuration Management Service" "**กลุ่มงาน:** Backend\n**Milestone:** M2\n**Team:** Backend\n\nพัฒนา Service สำหรับจัดการ Configuration" "task,todo,backend,priority:low" "M2"
+
+          # ── Group 3: Frontend/UI Development (M3) ──
+          create_issue "[M3] ตั้งค่า Frontend Project Structure" "**กลุ่มงาน:** Frontend\n**Milestone:** M3\n**Team:** Frontend\n\nตั้งค่าโครงสร้างโปรเจ็ค Frontend" "task,todo,frontend,priority:high" "M3"
+          create_issue "[M3] ออกแบบ UI/UX Wireframe" "**กลุ่มงาน:** Frontend\n**Milestone:** M3\n**Team:** Design\n\nออกแบบ UI/UX Wireframe สำหรับระบบ" "task,todo,frontend,priority:high" "M3"
+          create_issue "[M3] พัฒนา Chat Interface Component" "**กลุ่มงาน:** Frontend\n**Milestone:** M3\n**Team:** Frontend\n\nพัฒนา Component สำหรับ Chat Interface" "task,todo,frontend,priority:high" "M3"
+          create_issue "[M3] พัฒนา Authentication Pages (Login/Logout)" "**กลุ่มงาน:** Frontend\n**Milestone:** M3\n**Team:** Frontend\n\nพัฒนาหน้า Login และ Logout" "task,todo,frontend,priority:high" "M3"
+          create_issue "[M3] พัฒนา Dashboard / Home Page" "**กลุ่มงาน:** Frontend\n**Milestone:** M3\n**Team:** Frontend\n\nพัฒนาหน้า Dashboard หลัก" "task,todo,frontend,priority:medium" "M3"
+          create_issue "[M3] พัฒนา Settings Page" "**กลุ่มงาน:** Frontend\n**Milestone:** M3\n**Team:** Frontend\n\nพัฒนาหน้า Settings" "task,todo,frontend,priority:medium" "M3"
+          create_issue "[M3] พัฒนา Knowledge Base Management UI" "**กลุ่มงาน:** Frontend\n**Milestone:** M3\n**Team:** Frontend\n\nพัฒนา UI สำหรับจัดการ Knowledge Base" "task,todo,frontend,priority:medium" "M3"
+          create_issue "[M3] พัฒนา Admin Panel" "**กลุ่มงาน:** Frontend\n**Milestone:** M3\n**Team:** Frontend\n\nพัฒนา Admin Panel" "task,todo,frontend,priority:medium" "M3"
+          create_issue "[M3] Responsive Design & Mobile Support" "**กลุ่มงาน:** Frontend\n**Milestone:** M3\n**Team:** Frontend\n\nทำให้ UI รองรับ Responsive Design และ Mobile" "task,todo,frontend,priority:medium" "M3"
+          create_issue "[M3] Accessibility (a11y) Compliance" "**กลุ่มงาน:** Frontend\n**Milestone:** M3\n**Team:** Frontend\n\nทำให้ UI ผ่าน Accessibility standards" "task,todo,frontend,priority:low" "M3"
+
+          # ── Group 4: Integration & API (M4) ──
+          create_issue "[M4] เชื่อมต่อ Microsoft Azure OpenAI" "**กลุ่มงาน:** Integration\n**Milestone:** M4\n**Team:** Backend\n\nเชื่อมต่อระบบกับ Microsoft Azure OpenAI" "task,todo,integration,priority:high" "M4"
+          create_issue "[M4] เชื่อมต่อ Microsoft Graph API" "**กลุ่มงาน:** Integration\n**Milestone:** M4\n**Team:** Backend\n\nเชื่อมต่อระบบกับ Microsoft Graph API" "task,todo,integration,priority:high" "M4"
+          create_issue "[M4] เชื่อมต่อ SharePoint Integration" "**กลุ่มงาน:** Integration\n**Milestone:** M4\n**Team:** Backend\n\nเชื่อมต่อระบบกับ SharePoint" "task,todo,integration,priority:medium" "M4"
+          create_issue "[M4] เชื่อมต่อ Teams Integration" "**กลุ่มงาน:** Integration\n**Milestone:** M4\n**Team:** Backend\n\nเชื่อมต่อระบบกับ Microsoft Teams" "task,todo,integration,priority:medium" "M4"
+          create_issue "[M4] เชื่อมต่อ Outlook Integration" "**กลุ่มงาน:** Integration\n**Milestone:** M4\n**Team:** Backend\n\nเชื่อมต่อระบบกับ Outlook" "task,todo,integration,priority:medium" "M4"
+          create_issue "[M4] เชื่อมต่อ SSO / Azure AD" "**กลุ่มงาน:** Integration\n**Milestone:** M4\n**Team:** Backend\n\nเชื่อมต่อระบบกับ SSO และ Azure Active Directory" "task,todo,integration,priority:high" "M4"
+          create_issue "[M4] เชื่อมต่อ External Knowledge Sources" "**กลุ่มงาน:** Integration\n**Milestone:** M4\n**Team:** Backend\n\nเชื่อมต่อกับแหล่งข้อมูลภายนอก" "task,todo,integration,priority:medium" "M4"
+          create_issue "[M4] พัฒนา API Gateway / Middleware" "**กลุ่มงาน:** Integration\n**Milestone:** M4\n**Team:** Backend\n\nพัฒนา API Gateway และ Middleware" "task,todo,integration,priority:high" "M4"
+          create_issue "[M4] เชื่อมต่อ Monitoring Tools (Azure Monitor)" "**กลุ่มงาน:** Integration\n**Milestone:** M4\n**Team:** DevOps\n\nเชื่อมต่อกับ Azure Monitor และ Monitoring Tools อื่น ๆ" "task,todo,integration,priority:low" "M4"
+          create_issue "[M4] เชื่อมต่อ CI/CD Pipeline" "**กลุ่มงาน:** Integration\n**Milestone:** M4\n**Team:** DevOps\n\nเชื่อมต่อและตั้งค่า CI/CD Pipeline" "task,todo,integration,priority:medium" "M4"
+
+          # ── Group 5: Testing & QA (M5) ──
+          create_issue "[M5] วางแผน Test Strategy" "**กลุ่มงาน:** Testing\n**Milestone:** M5\n**Team:** QA\n\nวางแผน Test Strategy สำหรับระบบทั้งหมด" "task,todo,testing,priority:high" "M5"
+          create_issue "[M5] เขียน Unit Tests (Backend)" "**กลุ่มงาน:** Testing\n**Milestone:** M5\n**Team:** Backend\n\nเขียน Unit Tests สำหรับ Backend Services" "task,todo,testing,priority:high" "M5"
+          create_issue "[M5] เขียน Integration Tests" "**กลุ่มงาน:** Testing\n**Milestone:** M5\n**Team:** QA\n\nเขียน Integration Tests" "task,todo,testing,priority:high" "M5"
+          create_issue "[M5] เขียน E2E Tests (Frontend)" "**กลุ่มงาน:** Testing\n**Milestone:** M5\n**Team:** Frontend/QA\n\nเขียน End-to-End Tests สำหรับ Frontend" "task,todo,testing,priority:medium" "M5"
+          create_issue "[M5] Performance & Load Testing" "**กลุ่มงาน:** Testing\n**Milestone:** M5\n**Team:** QA\n\nทดสอบ Performance และ Load ของระบบ" "task,todo,testing,priority:medium" "M5"
+
+          # ── Group 6: DevOps & Deployment (M6) ──
+          create_issue "[M6] ตั้งค่า CI/CD Pipeline (GitHub Actions)" "**กลุ่มงาน:** DevOps\n**Milestone:** M6\n**Team:** DevOps\n\nตั้งค่า CI/CD Pipeline โดยใช้ GitHub Actions" "task,todo,devops,priority:high" "M6"
+          create_issue "[M6] ตั้งค่า Infrastructure as Code (IaC)" "**กลุ่มงาน:** DevOps\n**Milestone:** M6\n**Team:** DevOps\n\nตั้งค่า IaC เช่น Terraform หรือ Bicep" "task,todo,devops,priority:high" "M6"
+          create_issue "[M6] ตั้งค่า Environment (Dev/Staging/Prod)" "**กลุ่มงาน:** DevOps\n**Milestone:** M6\n**Team:** DevOps\n\nตั้งค่า Environment สำหรับ Dev, Staging และ Production" "task,todo,devops,priority:high" "M6"
+          create_issue "[M6] ตั้งค่า Monitoring & Alerting" "**กลุ่มงาน:** DevOps\n**Milestone:** M6\n**Team:** DevOps\n\nตั้งค่า Monitoring และ Alerting สำหรับระบบ" "task,todo,devops,priority:medium" "M6"
+          create_issue "[M6] จัดทำ Deployment Runbook & Documentation" "**กลุ่มงาน:** DevOps\n**Milestone:** M6\n**Team:** DevOps\n\nจัดทำ Runbook และเอกสาร Deployment" "task,todo,devops,priority:medium" "M6"
+
+          echo "✅ Done! All planned issues have been created."
+          echo "They will be automatically added to GitHub Project #5 via the auto-add-to-project workflow."
