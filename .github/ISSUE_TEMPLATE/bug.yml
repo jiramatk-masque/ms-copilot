@@ -1,0 +1,57 @@
+name: "🐛 Bug Report"
+description: รายงาน bug หรือปัญหาที่พบในระบบ
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐛 Bug Report
+
+  - type: textarea
+    id: description
+    attributes:
+      label: รายละเอียด Bug
+      description: อธิบาย bug ที่พบ
+      placeholder: อธิบายปัญหาที่พบ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: ขั้นตอนการ reproduce
+      placeholder: |
+        1. ไปที่หน้า...
+        2. กดปุ่ม...
+        3. เห็นปัญหา...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ผลที่คาดหวัง
+      placeholder: ควรจะเกิดอะไรขึ้น...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: ผลที่เกิดขึ้นจริง
+      placeholder: สิ่งที่เกิดขึ้นจริง...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true

@@ -1,0 +1,57 @@
+name: "✨ Feature / Task"
+description: สร้าง task หรือ feature ใหม่สำหรับโปรเจ็ค ms-copilot
+title: "[Feature] "
+labels: ["feature", "todo"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ✨ Feature / Task
+
+  - type: input
+    id: task-group
+    attributes:
+      label: กลุ่มงาน (Task Group)
+      description: ระบุกลุ่มงานที่ task นี้อยู่
+      placeholder: "เช่น: Architecture, Backend, Frontend, Integration, Testing, DevOps"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: รายละเอียด
+      description: อธิบาย task / feature นี้
+      placeholder: อธิบายสิ่งที่ต้องทำ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: เกณฑ์ที่ถือว่างานนี้เสร็จสมบูรณ์
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true
+
+  - type: input
+    id: team
+    attributes:
+      label: Team / Owner
+      placeholder: "เช่น: Backend, Frontend, DevOps, QA"
+    validations:
+      required: false

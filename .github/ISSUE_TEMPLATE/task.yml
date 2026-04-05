@@ -1,0 +1,52 @@
+name: "📋 Task"
+description: สร้าง general task สำหรับโปรเจ็ค
+title: "[Task] "
+labels: ["task", "todo"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📋 Task
+
+  - type: input
+    id: task-group
+    attributes:
+      label: กลุ่มงาน (Task Group)
+      placeholder: "เช่น: Architecture, Backend, Frontend, Integration, Testing, DevOps"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: รายละเอียด
+      placeholder: อธิบายสิ่งที่ต้องทำ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true
+
+  - type: input
+    id: team
+    attributes:
+      label: Team / Owner
+      placeholder: "เช่น: Backend, Frontend, DevOps, QA, Architect, PM"
+    validations:
+      required: false
+
+  - type: input
+    id: milestone
+    attributes:
+      label: Milestone
+      placeholder: "เช่น: M1, M2, M3..."
+    validations:
+      required: false
