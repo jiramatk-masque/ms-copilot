@@ -1,6 +1,4 @@
 services:
   web:
-    image: nginx:alpine
-    volumes:
-      - ./public:/usr/share/nginx/html:ro
+    build: .
     restart: unless-stopped
