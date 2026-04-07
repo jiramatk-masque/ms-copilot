@@ -1,7 +1,6 @@
 services:
   web:
     image: nginx:alpine
-    container_name: ms-copilot-web
     volumes:
-      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./public:/usr/share/nginx/html:ro
     restart: unless-stopped
