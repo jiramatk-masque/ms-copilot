@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  base: '/ms-copilot/',
   title: 'ms-copilot Discovery',
   description: 'Lightweight Product Discovery knowledge portal',
   srcDir: '.',

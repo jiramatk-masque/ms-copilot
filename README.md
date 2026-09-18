@@ -21,3 +21,7 @@
 - [Workflow](docs/workflow.md)
 - [GitHub Project Setup](docs/github-project-setup.md)
 - [Agent Architecture](docs/architecture/ai-agent.md)
+
+## Docs deployment (GitHub Pages)
+- One-time setup: go to **Settings → Pages → Source** and choose **GitHub Actions**.
+- Expected project URL after deployment: `https://jiramatk-masque.github.io/ms-copilot/`
