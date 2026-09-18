@@ -1,0 +1,50 @@
+name: "💡 New Idea"
+description: เสนอไอเดียใหม่แบบสั้นเพื่อเข้า Discovery workflow
+title: "[Idea] "
+labels: ["idea"]
+body:
+  - type: input
+    id: idea-name
+    attributes:
+      label: ชื่อไอเดีย
+      placeholder: ชื่อไอเดียแบบสั้น
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea-description
+    attributes:
+      label: ไอเดียนี้คืออะไร?
+      placeholder: อธิบายไอเดียโดยย่อ
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-opportunity
+    attributes:
+      label: ปัญหา / Opportunity ที่เห็น
+      placeholder: ปัญหาหรือโอกาสที่ไอเดียนี้ต้องการแก้
+    validations:
+      required: true
+
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme
+      options:
+        - Customer
+        - Game
+        - AI
+        - Platform
+        - Internal
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: reference
+    attributes:
+      label: Reference (FigJam, screenshot, research, URL)
+      placeholder: แนบลิงก์หรือข้อมูลอ้างอิงเพิ่มเติม (ไม่บังคับ)
+    validations:
+      required: false
